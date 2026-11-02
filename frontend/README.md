@@ -1,6 +1,6 @@
 # Campus Clubs — frontend
 
-Interface responsive de découverte et d’administration des clubs étudiants, construite avec React, TypeScript, Vite et Tailwind CSS v4.
+Vitrine responsive de la vie associative de l’ISJ, construite avec React, TypeScript, Vite et Tailwind CSS v4.
 
 ## Démarrer
 
@@ -18,6 +18,6 @@ npm run lint
 
 ## Périmètre actuel
 
-Les clubs sont alimentés par des données mockées dans `src/data/clubs.ts`. L’interface permet de rechercher et filtrer les clubs, consulter leur fiche détaillée et créer, modifier ou supprimer un club. Les changements sont conservés en mémoire le temps de la session ; aucune API n’est encore connectée.
+Les clubs et rendez-vous sont alimentés par des données mockées dans `src/data/clubs.ts`. La vitrine met en avant les événements, propose un calendrier mensuel interactif, permet de rechercher et filtrer les clubs et présente la fiche détaillée de chacun.
 
-La navigation latérale, l’en-tête, le pied de page et les notifications toast sont partagés. Les inscriptions et les événements sont signalés comme fonctionnalités à venir.
+La navigation publique, le pied de page, les notifications toast, les cartes d’événements et le calendrier sont réutilisables. Les données sont statiques ; aucune API d’événements ou d’inscriptions n’est encore connectée.

@@ -1,4 +1,4 @@
-import type { Club } from '../types'
+import type { CampusEvent, Club } from '../types'
 
 export const categories = ['Toutes les catégories', 'Sport', 'Culture', 'Solidarité', 'Art & création', 'Sciences'] as const
 
@@ -15,6 +15,7 @@ export const initialClubs: Club[] = [
     location: 'Gymnase universitaire',
     status: 'Actif',
     accent: 'from-amber-400 to-orange-500',
+    activities: ['Entraînements ouverts', 'Matchs du campus', 'Tournoi interclubs'],
   },
   {
     id: '2',
@@ -28,6 +29,7 @@ export const initialClubs: Club[] = [
     location: 'Bibliothèque, salle B12',
     status: 'Actif',
     accent: 'from-violet-400 to-purple-600',
+    activities: ['Lectures en plein air', 'Rencontres d’auteurs', 'Club de lecture'],
   },
   {
     id: '3',
@@ -41,6 +43,7 @@ export const initialClubs: Club[] = [
     location: 'Maison des étudiants',
     status: 'Actif',
     accent: 'from-emerald-400 to-teal-600',
+    activities: ['Collectes solidaires', 'Actions de terrain', 'Ateliers de partage'],
   },
   {
     id: '4',
@@ -54,6 +57,7 @@ export const initialClubs: Club[] = [
     location: 'Atelier créatif, bâtiment C',
     status: 'Actif',
     accent: 'from-rose-400 to-pink-600',
+    activities: ['Balades dessinées', 'Ateliers créatifs', 'Expo de fin d’année'],
   },
   {
     id: '5',
@@ -67,6 +71,7 @@ export const initialClubs: Club[] = [
     location: 'Laboratoire de sciences',
     status: 'Complet',
     accent: 'from-sky-400 to-blue-600',
+    activities: ['Expériences en équipe', 'Défis scientifiques', 'Labo ouvert'],
   },
   {
     id: '6',
@@ -80,5 +85,94 @@ export const initialClubs: Club[] = [
     location: 'Salle polyvalente',
     status: 'Actif',
     accent: 'from-fuchsia-400 to-pink-600',
+    activities: ['Scène ouverte', 'Ateliers de jeu', 'Spectacle de fin d’année'],
+  },
+]
+
+export const featuredEvents: CampusEvent[] = [
+  {
+    id: 'festival-des-talents',
+    clubId: '6',
+    title: 'La nuit des talents',
+    description: 'Une scène, mille façons de s’exprimer. Danse, musique, théâtre : les étudiants prennent les projecteurs pour une soirée qu’on n’a pas envie de voir finir.',
+    date: '2026-11-06',
+    startTime: '18:00',
+    endTime: '22:00',
+    location: 'Parvis de l’établissement',
+    image: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1800&q=90',
+    format: 'À ne pas manquer',
+    featured: true,
+  },
+  {
+    id: 'basket-derby',
+    clubId: '1',
+    title: 'Le grand derby du campus',
+    description: 'Les Aigles rencontrent leurs rivaux sur le terrain. Viens encourager l’équipe et faire du gymnase la tribune la plus bruyante du campus.',
+    date: '2026-10-24',
+    startTime: '15:00',
+    endTime: '18:00',
+    location: 'Gymnase universitaire',
+    image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1000&q=85',
+    format: 'Tournoi',
+  },
+  {
+    id: 'open-mic',
+    clubId: '6',
+    title: 'Open mic : à toi le micro',
+    description: 'Un micro ouvert, une scène accueillante et ton talent. Inscris-toi pour jouer ou viens découvrir les artistes du campus.',
+    date: '2026-10-29',
+    startTime: '17:30',
+    endTime: '20:00',
+    location: 'Salle polyvalente',
+    image: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=1000&q=85',
+    format: 'Rencontre',
+  },
+  {
+    id: 'atelier-carnet',
+    clubId: '4',
+    title: 'Dessiner le campus autrement',
+    description: 'Une balade carnet à la main pour regarder autrement les lieux que l’on traverse chaque jour. Matériel fourni, débutants bienvenus.',
+    date: '2026-10-22',
+    startTime: '16:00',
+    endTime: '18:00',
+    location: 'Rendez-vous devant la bibliothèque',
+    image: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1000&q=85',
+    format: 'Atelier',
+  },
+  {
+    id: 'lectures-en-partage',
+    clubId: '2',
+    title: 'Lectures en partage',
+    description: 'Une pause au vert, quelques pages à voix haute, puis une conversation qui part dans toutes les directions.',
+    date: '2026-10-27',
+    startTime: '12:30',
+    endTime: '14:00',
+    location: 'Jardin central',
+    image: 'https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=1000&q=85',
+    format: 'Rencontre',
+  },
+  {
+    id: 'science-en-fete',
+    clubId: '5',
+    title: 'Le labo sort dans la cour',
+    description: 'Expériences étonnantes et défis scientifiques à tester en équipe. La curiosité est le seul prérequis.',
+    date: '2026-11-12',
+    startTime: '14:00',
+    endTime: '17:00',
+    location: 'Cour principale',
+    image: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1000&q=85',
+    format: 'Atelier',
+  },
+  {
+    id: 'collecte-solidaire',
+    clubId: '3',
+    title: 'Une rentrée plus solidaire',
+    description: 'Une collecte de fournitures et un après-midi de rencontres pour donner un coup de pouce à celles et ceux qui en ont besoin.',
+    date: '2026-11-18',
+    startTime: '13:00',
+    endTime: '17:00',
+    location: 'Maison des étudiants',
+    image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=1000&q=85',
+    format: 'À ne pas manquer',
   },
 ]

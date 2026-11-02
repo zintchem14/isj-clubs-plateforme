@@ -12,10 +12,25 @@ export type Club = {
   location: string
   status: 'Actif' | 'Complet'
   accent: string
+  activities?: string[]
 }
 
 export type ClubDraft = Omit<Club, 'id' | 'status' | 'members' | 'accent'> & {
   members?: number
+}
+
+export type CampusEvent = {
+  id: string
+  clubId: string
+  title: string
+  description: string
+  date: string
+  startTime: string
+  endTime: string
+  location: string
+  image: string
+  format: 'À ne pas manquer' | 'Atelier' | 'Rencontre' | 'Tournoi'
+  featured?: boolean
 }
 
 export type ToastMessage = {

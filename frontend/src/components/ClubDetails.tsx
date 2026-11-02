@@ -1,16 +1,16 @@
-import { ArrowLeft, CalendarDays, Check, Clock3, MapPin, Pencil, Share2, Users } from 'lucide-react'
-import type { Club } from '../types'
+import { ArrowLeft, ArrowUpRight, CalendarDays, MapPin, Share2, Sparkles, Users } from 'lucide-react'
+import type { CampusEvent, Club } from '../types'
 
 type ClubDetailsProps = {
   club: Club
+  events: CampusEvent[]
   onBack: () => void
-  onEdit: (club: Club) => void
+  onEvent: (event: CampusEvent) => void
   onToast: (title: string, description: string) => void
 }
 
-export function ClubDetails({ club, onBack, onEdit, onToast }: ClubDetailsProps) {
-  const remaining = Math.max(club.capacity - club.members, 0)
-  const occupancy = Math.min(Math.round((club.members / club.capacity) * 100), 100)
+export function ClubDetails({ club, events, onBack, onEvent, onToast }: ClubDetailsProps) {
+  const clubEvents = events.filter((event) => event.clubId === club.id).sort((a, b) => a.date.localeCompare(b.date))
 
   async function shareClub() {
     try {
@@ -18,10 +18,12 @@ export function ClubDetails({ club, onBack, onEdit, onToast }: ClubDetailsProps)
         await navigator.share({ title: club.name, text: club.description, url: window.location.href })
       } else if (navigator.clipboard) {
         await navigator.clipboard.writeText(window.location.href)
+        onToast('Lien copié', 'Partage la fiche du club avec tes amis.')
+        return
       } else {
         throw new Error('Le partage n’est pas pris en charge sur ce navigateur.')
       }
-      onToast('Fiche prête à partager', 'Le lien du club a été copié ou partagé.')
+      onToast('Fiche partagée', 'Fais découvrir ce club autour de toi !')
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') return
       onToast('Partage indisponible', 'Une erreur est survenue lors du partage de cette fiche.')
@@ -29,46 +31,53 @@ export function ClubDetails({ club, onBack, onEdit, onToast }: ClubDetailsProps)
   }
 
   return (
-    <section className="mx-auto max-w-5xl">
-      <button type="button" onClick={onBack} className="mb-5 flex items-center gap-2 text-[12px] font-semibold text-slate-500 transition hover:text-slate-900"><ArrowLeft size={15} /> Tous les clubs</button>
-      <div className="overflow-hidden rounded-[24px] border border-slate-200/80 bg-white shadow-sm">
-        <div className="relative h-[230px] sm:h-[320px]">
-          <img src={club.image} alt={`Illustration du club ${club.name}`} className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/10 to-transparent" />
-          <span className="absolute left-5 top-5 rounded-full bg-white/90 px-3 py-1.5 text-[10px] font-semibold text-slate-700 backdrop-blur">{club.category}</span>
-          <div className="absolute bottom-5 left-5 right-5 flex flex-wrap items-end justify-between gap-4 sm:bottom-7 sm:left-8 sm:right-8">
-            <div className="text-white">
-              <span className={`mb-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[9px] font-semibold ${club.status === 'Complet' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-50 text-emerald-800'}`}><span className={`h-1.5 w-1.5 rounded-full ${club.status === 'Complet' ? 'bg-amber-500' : 'bg-emerald-500'}`} />{club.status}</span>
-              <h1 className="text-[28px] font-bold tracking-[-0.04em] sm:text-[38px]">{club.name}</h1>
-            </div>
-            <div className="flex gap-2">
-              <button type="button" onClick={shareClub} className="flex h-10 items-center gap-2 rounded-xl border border-white/35 bg-white/15 px-3 text-[11px] font-semibold text-white backdrop-blur transition hover:bg-white/25"><Share2 size={14} /><span className="hidden sm:inline">Partager</span></button>
-              <button type="button" onClick={() => onEdit(club)} className="flex h-10 items-center gap-2 rounded-xl bg-[#c6f06b] px-3.5 text-[11px] font-bold text-[#1a3025] transition hover:bg-[#d4f694]"><Pencil size={14} />Modifier</button>
-            </div>
+    <main className="mx-auto max-w-[1120px] px-5 pb-16 pt-7 sm:px-8">
+      <button type="button" onClick={onBack} className="mb-5 flex items-center gap-2 text-[12px] font-semibold text-slate-500 transition hover:text-[#31583d]"><ArrowLeft size={15} />Tous les clubs</button>
+      <section className="relative flex min-h-[330px] items-end overflow-hidden rounded-[28px] bg-[#1c2c22] sm:min-h-[410px]">
+        <img src={club.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#101a13]/85 via-[#101a13]/25 to-transparent" />
+        <div className="relative z-10 flex w-full flex-col items-start justify-end gap-5 p-6 sm:flex-row sm:items-end sm:justify-between sm:p-10">
+          <div className="max-w-2xl text-white">
+            <span className="mb-3 inline-flex rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.13em] backdrop-blur">{club.category} · Club étudiant</span>
+            <h1 className="text-[34px] font-bold leading-tight tracking-[-0.05em] sm:text-[48px]">{club.name}</h1>
+            <p className="mt-2 flex items-center gap-1.5 text-[11px] text-white/75"><Users size={13} />{club.members} étudiants font déjà partie de l’aventure</p>
+          </div>
+          <div className="flex shrink-0 gap-2">
+            <button type="button" onClick={shareClub} className="flex h-10 items-center gap-2 rounded-full border border-white/35 bg-white/10 px-4 text-[11px] font-semibold text-white backdrop-blur hover:bg-white/20"><Share2 size={14} />Partager</button>
+            <a href="#club-agenda" className="flex h-10 items-center gap-2 rounded-full bg-[#d5f28a] px-4 text-[11px] font-bold text-[#20382a] transition hover:bg-white">Voir les activités <ArrowUpRight size={14} /></a>
           </div>
         </div>
-        <div className="grid gap-8 p-5 sm:p-8 lg:grid-cols-[1fr_300px]">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.17em] text-[#688958]">À propos du club</p>
-            <p className="mt-3 max-w-2xl text-[14px] leading-7 text-slate-600">{club.description}</p>
-            <div className="mt-7 grid gap-3 sm:grid-cols-2">
-              <div className="flex items-center gap-3 rounded-2xl bg-[#f6f8f4] p-4"><span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[#638650] shadow-sm"><CalendarDays size={18} /></span><div><p className="text-[10px] text-slate-400">RENDEZ-VOUS</p><p className="mt-1 text-[12px] font-semibold text-slate-800">{club.meeting}</p></div></div>
-              <div className="flex items-center gap-3 rounded-2xl bg-[#f6f8f4] p-4"><span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[#638650] shadow-sm"><MapPin size={18} /></span><div><p className="text-[10px] text-slate-400">LIEU</p><p className="mt-1 text-[12px] font-semibold text-slate-800">{club.location}</p></div></div>
-            </div>
-          </div>
-          <aside className="rounded-2xl border border-slate-100 bg-[#fbfcfa] p-5">
-            <p className="text-[12px] font-bold text-slate-800">La vie du club</p>
-            <div className="mt-5 flex items-center justify-between">
-              <div className="flex items-center gap-2 text-slate-500"><Users size={16} /><span className="text-[11px]">Membres</span></div>
-              <span className="text-[13px] font-bold text-slate-900">{club.members}<span className="font-medium text-slate-400"> / {club.capacity}</span></span>
-            </div>
-            <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-100"><span className={`block h-full rounded-full bg-gradient-to-r ${club.accent}`} style={{ width: `${occupancy}%` }} /></div>
-            <div className="mt-2 flex justify-between text-[10px] text-slate-400"><span>Places occupées</span><span>{occupancy}%</span></div>
-            <div className="mt-5 flex items-center gap-2 rounded-xl bg-white p-3 text-[11px] text-slate-600"><Clock3 size={15} className="text-[#6e9656]" />{remaining > 0 ? <><strong className="text-slate-800">{remaining} places</strong> encore disponibles</> : <><Check size={14} className="text-amber-600" />Les inscriptions sont complètes</>}</div>
-            <p className="mt-4 text-[10px] leading-5 text-slate-400">Les inscriptions étudiantes pourront être activées lors de la prochaine étape.</p>
-          </aside>
+      </section>
+
+      <div className="grid gap-10 py-9 lg:grid-cols-[1fr_300px]">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.17em] text-[#71905e]">VIENS COMME TU ES</p>
+          <h2 className="mt-2 text-[25px] font-bold tracking-[-0.04em] text-slate-900 sm:text-[30px]">Une passion, mille façons de la vivre.</h2>
+          <p className="mt-3 max-w-2xl text-[13px] leading-7 text-slate-600">{club.description}</p>
+          <div className="mt-6 flex flex-wrap gap-2">{(club.activities ?? ['Rencontres ouvertes', 'Ateliers créatifs', 'Projets entre étudiants']).map((activity) => <span key={activity} className="rounded-full border border-[#dfe9d6] bg-[#f5f8f1] px-3.5 py-2 text-[10px] font-semibold text-[#567448]">{activity}</span>)}</div>
+
+          <section id="club-agenda" className="mt-10 scroll-mt-24">
+            <div className="mb-4 flex items-end justify-between gap-3"><div><p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#71905e]">ON SE RETROUVE BIENTÔT</p><h2 className="mt-1 text-[20px] font-bold tracking-tight text-slate-900">Les prochains rendez-vous</h2></div><CalendarDays size={19} className="text-[#71905e]" /></div>
+            {clubEvents.length ? <div className="space-y-3">{clubEvents.map((event) => {
+              const eventDate = new Date(`${event.date}T12:00:00`)
+              return <button key={event.id} type="button" onClick={() => onEvent(event)} className="group flex w-full items-center gap-4 rounded-2xl border border-slate-200/80 bg-white p-3 text-left transition hover:border-[#d2e1c7] hover:shadow-sm sm:p-4">
+                <span className="flex h-[58px] w-[54px] shrink-0 flex-col items-center justify-center rounded-xl bg-[#eff4e8] text-[#385d3c]"><span className="text-[19px] font-bold leading-none">{new Intl.DateTimeFormat('fr-FR', { day: '2-digit' }).format(eventDate)}</span><span className="mt-1 text-[9px] font-bold uppercase">{new Intl.DateTimeFormat('fr-FR', { month: 'short' }).format(eventDate).replace('.', '')}</span></span>
+                <span className="min-w-0 flex-1"><span className="block text-[13px] font-bold text-slate-800">{event.title}</span><span className="mt-1.5 flex flex-wrap items-center gap-3 text-[10px] text-slate-400"><span>{event.startTime} – {event.endTime}</span><span className="flex items-center gap-1"><MapPin size={11} />{event.location}</span></span></span>
+                <ArrowUpRight size={16} className="shrink-0 text-slate-300 transition group-hover:text-[#4b7046]" />
+              </button>
+            })}</div> : <p className="rounded-2xl border border-dashed border-slate-200 p-5 text-[12px] text-slate-500">Les prochains rendez-vous de ce club arrivent bientôt. Garde l’œil sur l’agenda !</p>}
+          </section>
         </div>
+
+        <aside className="h-fit rounded-[22px] bg-[#edf2e7] p-5 sm:p-6">
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[#678653]"><Sparkles size={18} /></span>
+          <p className="mt-4 text-[16px] font-bold text-[#20382a]">Et si tu venais essayer ?</p>
+          <p className="mt-2 text-[11px] leading-5 text-[#687b60]">Les clubs, c’est avant tout des rencontres. Viens découvrir une activité et trouver ta place sur le campus.</p>
+          <div className="mt-5 flex items-center gap-2 border-t border-[#dce6d3] pt-4 text-[10px] text-[#607656]"><MapPin size={13} />{club.location}</div>
+          <div className="mt-2 flex items-center gap-2 text-[10px] text-[#607656]"><CalendarDays size={13} />{club.meeting}</div>
+          <button type="button" onClick={() => onToast('On se retrouve bientôt !', `Tu peux venir rencontrer ${club.name} à son prochain rendez-vous.`)} className="mt-5 flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#214633] text-[11px] font-semibold text-white transition hover:bg-[#315a41]">Découvrir le club <ArrowUpRight size={14} /></button>
+        </aside>
       </div>
-    </section>
+    </main>
   )
 }
