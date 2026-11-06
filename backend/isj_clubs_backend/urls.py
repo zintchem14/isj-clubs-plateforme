@@ -15,8 +15,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+from .views import home, clubs_view, memberships_view # Importation de la vue accueil
+
 
 urlpatterns = [
+    path('', home, name='home'), 
     path('admin/', admin.site.urls),
+    path('api/', include('clubs.urls')),
+    path('clubs/', clubs_view, name='clubs_list'),              
+    path('memberships/', memberships_view, name='memberships_list'), 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+

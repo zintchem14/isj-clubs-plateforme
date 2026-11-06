@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plateforme ISJ Clubs — API & Services</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="container nav-content">
+            <div class="logo">
+                <span class="badge">ISJ</span> Clubs API
+            </div>
+            <nav>
+                <a href="/admin/" class="btn btn-primary">Espace Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container hero">
+        <div class="hero-card">
+            <h1>Bienvenue sur l'API <span class="highlight">ISJ Clubs</span></h1>
+            <p>Serveur Back-end de gestion des activités, des adhésions et de la vie associative de l'Institut Saint Jean.</p>
+           
+            <div class="status-grid">
+                <div class="status-item">
+                    <span class="status-dot online"></span>
+                    <div>
+                        <strong>Statut API</strong>
+                        <p>Opérationnel (v1.0)</p>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <span class="status-dot active"></span>
+                    <div>
+                        <strong>Base de Données</strong>
+                        <p>Connectée</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <a href="{% url 'clubs_list' %}" class="btn btn-lg btn-primary">Accéder aux Endpoints Clubs</a>
+                <a href="{% url 'memberships_list' %}" class="btn btn-lg btn-secondary">Gestion des Adhésions</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <p>&copy; {% now "Y" %} Institut Saint Jean — Projet ISJ Clubs. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

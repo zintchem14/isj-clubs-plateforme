@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Clubs - ISJ</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container nav-content">
+            <div class="logo"><a href="{% url 'home' %}" style="text-decoration:none; color:inherit;">ISJ Clubs</a></div>
+            <a href="{% url 'home' %}" class="btn btn-outline">Accueil</a>
+        </div>
+    </header>
+    <main class="container" style="padding: 2rem 0;">
+        <h1>Nos Clubs Actifs</h1>
+        <p>Découvrez les différents clubs de l'Institut Saint Jean et rejoignez-les.</p>
+       
+        <div style="margin-top: 2rem; display: grid; gap: 1.5rem;">
+            {% for club in clubs %}
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                    <h3 style="color: #1e3a8a; margin-bottom: 0.5rem;">{{ club.name }}</h3>
+                    <p style="color: #64748b; margin-bottom: 1rem;">{{ club.description }}</p>
+                    <span style="font-size: 0.85rem; background: #f1f5f9; padding: 0.25rem 0.5rem; border-radius: 4px;">
+                        Créé le : {{ club.created_at|date:"d/m/Y" }}
+                    </span>
+                </div>
+            {% empty %}
+                <p style="color: #64748b; font-style: italic;">Aucun club n'a encore été créé pour le moment. Passe par l'espace admin pour en ajouter un !</p>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>
